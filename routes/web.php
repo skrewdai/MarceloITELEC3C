@@ -30,6 +30,8 @@ Route::middleware([
     })->name('dashboard');
 });
 
-Route::get('/all/category',[CategoryController::class,'index'])->name('AllCat');
-Route::get('/all/categories', [CategoryController::class, 'index'])->name('AllCat');
-Route::post('/all/categories', [CategoryController::class, 'store'])->name('AllCat'); 
+Route::get('/all/categoty',[CategoryController::class,'index'])->name('AllCat');
+Route::get('/categories', [CategoryController::class, 'index'])->name('AllCat');
+Route::post('/categories', [CategoryController::class, 'store'])->name('AllCat'); 
+Route::get('/category/update/{id}', [CategoryController::class, 'edit'])->name('editCategory');
+Route::post('/category/update/{id}', [CategoryController::class, 'update']);
