@@ -9,8 +9,9 @@ use Illuminate\Support\Facades\Auth;
 class CategoryController extends Controller
 {
     public function index(){
-        $categories = Category::all();
-        return view('admin.category.category',compact('categories'));
+        $categories = Category::latest()->paginate(10);
+        $trashCat = Category::onlyTrashed()->latest()->paginate(5);
+        return view('admin.category.category',compact('categories','trashCat'));
     }
     public function store(Request $request)
     {
@@ -23,10 +24,6 @@ class CategoryController extends Controller
         return redirect()->route('AllCat');
     }
 
-    public function UpdateCat($id){
-        $update = Category::find($id);
-        return view('admin.category.category',compact('update'));
-    }
     public function edit($id){
         $update = Category::find($id);
         return view('admin.category.editCategory', compact('update'));
@@ -40,4 +37,22 @@ class CategoryController extends Controller
         return redirect()->route('AllCat');
     }
 
+    
+    public function remove($id){
+        $category = Category::find($id)->delete();
+
+        return redirect()->route('AllCat')->with('success', 'Category Removed successfully.');
+    }
+
+    public function restore($id){
+        $restore = Category::withTrashed()->find($id)->restore();
+
+        return redirect()->route('AllCat')->with('success', 'Category Restored successfully.');
+    }
+
+    public function delete($id){
+        $restore = Category::withTrashed()->find($id)->forceDelete();
+
+        return redirect()->route('AllCat')->with('success', 'Category Deleted successfully.');
+    }
 }
